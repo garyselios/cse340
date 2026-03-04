@@ -11,9 +11,13 @@
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.0.3",
+<<<<<<< HEAD
     "ejs": "^4.0.1",
     "express": "^4.18.2",
     "express-ejs-layouts": "^2.5.1",
+=======
+    "express": "^4.18.2",
+>>>>>>> 643192ea2c9358840d7613123e628d57b505e40e
     "pg": "^8.8.0"
   },
   "devDependencies": {
