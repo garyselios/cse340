@@ -1,0 +1,48 @@
+const invModel = require("../models/inventory-model")
+const Util = {}
+
+/*
+ * Constructs the nav HTML unordered list
+*/
+Util.getNav = async function () {
+  let data = await invModel.getClassifications()
+  let list = "<ul>"
+  list += '<li><a href="/" title="Home page">Home</a></li>'
+  data.rows.forEach((row) => {
+    list += "<li>"
+    list +=
+      '<a href="/inv/type/' +
+      row.classification_id +
+      '" title="See our inventory of ' +
+      row.classification_name +
+      ' vehicles">' +
+      row.classification_name +
+      "</a>"
+    list += "</li>"
+  })
+  list += "</ul>"
+  return list
+}
+
+/*
+ * Build the classification view HTML
+*/
+Util.buildClassificationGrid = async function (data) {
+  let grid
+  if (data.length > 0) {
+    grid = '<div id="inventoryDisplay">'
+    data.forEach((vehicle) => {
+      grid += '<div class="vehicle-card">'
+      grid += '<img src="' + vehicle.inv_thumbnail + '" alt="Image of ' + vehicle.inv_make + ' ' + vehicle.inv_model + '">'
+      grid += '<h3><a href="/inv/detail/' + vehicle.inv_id + '">' + vehicle.inv_make + ' ' + vehicle.inv_model + '</a></h3>'
+      grid += '<p>$' + new Intl.NumberFormat('en-US').format(vehicle.inv_price) + '</p>'
+      grid += '</div>'
+    })
+    grid += '</div>'
+  } else {
+    grid = '<p class="notice">Sorry, no matching vehicles could be found.</p>'
+  }
+  return grid
+}
+
+module.exports = Util
