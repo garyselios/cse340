@@ -1,4 +1,5 @@
 
+
 /* 
  * Require Statements
  */
@@ -9,7 +10,7 @@ const app = express()
 const static = require("./routes/static")
 const baseController = require("./controllers/baseController")
 const invRoutes = require("./routes/invRoutes")
-const utilities = require("./utilities/")  // ← NUEVO: para manejo de errores
+const utilities = require("./utilities/")
 
 /* 
  * View Engine and Templates
@@ -20,11 +21,11 @@ app.set("layout", "./layouts/layout")
 
 /* 
  * Routes
-*/
+ */
 app.use(static)
 
 /*
- * Index Route (con manejo de errores)
+ * Index Route (with error handling)
  */
 app.get("/", utilities.handleErrors(baseController.buildHome))
 
@@ -32,6 +33,13 @@ app.get("/", utilities.handleErrors(baseController.buildHome))
  * Inventory Routes
  */
 app.use("/inv", invRoutes)
+
+/* 
+ * Intentional Error Route (500)
+ */
+app.get("/trigger-error", utilities.handleErrors(async (req, res, next) => {
+  throw new Error("This is an intentional 500 error for testing purposes.")
+}))
 
 /* 
  * File Not Found Route - must be last route in list
@@ -63,7 +71,7 @@ app.use(async (err, req, res, next) => {
 /* 
  * Local Server Information
  * Values from .env (environment) file
-*/
+ */
 const port = process.env.PORT
 const host = process.env.HOST
 
