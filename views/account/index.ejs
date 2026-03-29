@@ -1,0 +1,18 @@
+<main>
+  <h1><%= title %></h1>
+
+  <%- messages() %>
+
+  <% if (loggedin) { %>
+    <p>Welcome, <strong><%= accountData.account_firstname %></strong>!</p>
+    <p>You're logged in.</p>
+
+    <ul>
+      <li><strong>Email:</strong> <%= accountData.account_email %></li>
+      <li><strong>Account Type:</strong> <%= accountData.account_type %></li>
+    </ul>
+  <% } else { %>
+    <p>You are not logged in.</p>
+    <a href="/account/login">Login here</a>
+  <% } %>
+</main>
