@@ -1,4 +1,9 @@
 <main>
   <h1><%= title %></h1>
   <%- detailHTML %>
+  
+  <div class="detail-actions">
+    <a href="/inv/edit/<%= vehicle.inv_id %>" class="btn-edit">Edit Vehicle</a>
+    <a href="/inv/delete/<%= vehicle.inv_id %>" class="btn-delete">Delete Vehicle</a>
+  </div>
 </main>

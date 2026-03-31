@@ -224,7 +224,6 @@ invController.updateInventory = async function (req, res, next) {
       classification_id,
     } = req.body;
 
-    // Sincronización estricta con los parámetros del modelo
     const updateResult = await invModel.updateInventory(
       inv_id,
       inv_make,
@@ -266,6 +265,51 @@ invController.updateInventory = async function (req, res, next) {
     }
   } catch (error) {
     console.error("Error in updateInventory:", error);
+    next(error);
+  }
+};
+
+/* Build delete confirmation view */
+invController.buildDeleteConfirmation = async function (req, res, next) {
+  try {
+    const inv_id = parseInt(req.params.inv_id);
+    const vehicle = await invModel.getVehicleById(inv_id);
+    
+    if (!vehicle) {
+      return next({ status: 404, message: "Vehicle not found" });
+    }
+    
+    let nav = await utilities.getNav();
+    const vehicleName = `${vehicle.inv_make} ${vehicle.inv_model}`;
+    
+    res.render("inventory/delete-confirm", {
+      title: `Delete ${vehicleName}`,
+      nav,
+      vehicle,
+      errors: null,
+    });
+  } catch (error) {
+    console.error("Error in buildDeleteConfirmation:", error);
+    next(error);
+  }
+};
+
+/* Process delete inventory item */
+invController.deleteInventoryItem = async function (req, res, next) {
+  try {
+    const inv_id = parseInt(req.params.inv_id);
+    const deletedVehicle = await invModel.deleteInventoryItem(inv_id);
+    
+    if (deletedVehicle) {
+      const vehicleName = `${deletedVehicle.inv_make} ${deletedVehicle.inv_model}`;
+      req.flash("notice", `Vehicle "${vehicleName}" was successfully deleted.`);
+      res.redirect("/inv/");
+    } else {
+      req.flash("notice", "Sorry, the vehicle could not be deleted.");
+      res.redirect(`/inv/delete/${inv_id}`);
+    }
+  } catch (error) {
+    console.error("Error in deleteInventoryItem:", error);
     next(error);
   }
 };
