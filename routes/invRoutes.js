@@ -1,23 +1,22 @@
-// Required
 const express = require("express")
 const router = new express.Router()
 const invController = require("../controllers/invController")
 const utilities = require("../utilities/")
 const regValidate = require("../utilities/inventory-validation")
 
-// Route to display vehicles by classification (with error handling)
+// Display vehicles by classification
 router.get("/type/:classificationId", utilities.handleErrors(invController.buildByClassificationId))
 
-// Route to display vehicle detail (with error handling)
+// Vehicle detail view
 router.get("/detail/:invId", utilities.handleErrors(invController.buildVehicleDetail))
 
-// Route to display management view
+// Management view
 router.get("/", utilities.handleErrors(invController.buildManagement))
 
-// Route to display add classification view
+// Add classification view
 router.get("/add-classification", utilities.handleErrors(invController.buildAddClassification))
 
-// Process add classification
+// Add classification process
 router.post(
   "/add-classification",
   regValidate.classificationRules(),
@@ -25,15 +24,30 @@ router.post(
   utilities.handleErrors(invController.addClassification)
 )
 
-// Route to display add inventory view
+// Add inventory view
 router.get("/add-inventory", utilities.handleErrors(invController.buildAddInventory))
 
-// Process add inventory
+// Add inventory process
 router.post(
   "/add-inventory",
   regValidate.inventoryRules(),
   regValidate.checkInventoryData,
   utilities.handleErrors(invController.addInventory)
+)
+
+// Get inventory JSON
+router.get("/getInventory/:classification_id", utilities.handleErrors(invController.getInventoryJSON))
+
+// Edit inventory view
+router.get("/edit/:inv_id", utilities.handleErrors(invController.buildEditInventory))
+
+
+// Update inventory process
+router.post(
+  "/update",
+  regValidate.inventoryRules(),
+  regValidate.checkUpdateData,
+  utilities.handleErrors(invController.updateInventory)
 )
 
 module.exports = router

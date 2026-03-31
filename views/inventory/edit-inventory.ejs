@@ -1,0 +1,66 @@
+<main>
+  <h1><%= title %></h1>
+  <%- messages() %>
+
+  <% if (errors && errors.array) { %>
+    <ul class="notice">
+      <% errors.array().forEach(error => { %>
+        <li><%= error.msg %></li>
+      <% }) %>
+    </ul>
+  <% } %>
+
+  <form id="updateForm" action="/inv/update" method="post">
+    
+    <!-- ID oculto -->
+    <input type="hidden" name="inv_id" value="<%= inv_id %>">
+
+    <!-- MAKE -->
+    <label for="inv_make">Make:</label>
+    <input type="text" name="inv_make" id="inv_make" value="<%= inv_make %>" required>
+
+    <!-- MODEL -->
+    <label for="inv_model">Model:</label>
+    <input type="text" name="inv_model" id="inv_model" value="<%= inv_model %>" required>
+
+    <!-- YEAR -->
+    <label for="inv_year">Year:</label>
+    <input type="number" name="inv_year" id="inv_year" value="<%= inv_year %>" required>
+
+    <!-- CLASSIFICATION (ARREGLADO) -->
+    <label for="classification_id">Classification:</label>
+    <%- classificationSelect %>
+
+    <!-- DESCRIPTION -->
+    <label for="inv_description">Description:</label>
+    <textarea name="inv_description" id="inv_description"><%= inv_description %></textarea>
+
+    <!-- IMAGE -->
+    <label for="inv_image">Image URL:</label>
+    <input type="text" name="inv_image" id="inv_image" value="<%= inv_image %>">
+
+    <!-- THUMBNAIL -->
+    <label for="inv_thumbnail">Thumbnail URL:</label>
+    <input type="text" name="inv_thumbnail" id="inv_thumbnail" value="<%= inv_thumbnail %>">
+
+    <!-- PRICE -->
+    <label for="inv_price">Price:</label>
+    <input type="number" step="0.01" name="inv_price" id="inv_price" value="<%= inv_price %>">
+
+    <!-- MILES -->
+    <label for="inv_miles">Miles:</label>
+    <input type="number" name="inv_miles" id="inv_miles" value="<%= inv_miles %>">
+
+    <!-- COLOR -->
+    <label for="inv_color">Color:</label>
+    <input type="text" name="inv_color" id="inv_color" value="<%= inv_color %>">
+
+    <!-- BOTÓN -->
+    <button type="submit">Update Vehicle</button>
+
+  </form>
+
+  <p><a href="/inv/">Back to Management</a></p>
+
+  <script src="/js/inv-update.js"></script>
+</main>

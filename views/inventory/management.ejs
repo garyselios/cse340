@@ -4,10 +4,27 @@
 
   <div class="management-links">
     <p>
-      <a href="/inv/add-classification" class="btn">Add New Classification</a>
+      <a href="/inv/add-classification">Add New Classification</a>
     </p>
     <p>
-      <a href="/inv/add-inventory" class="btn">Add New Vehicle</a>
+      <a href="/inv/add-inventory">Add New Vehicle</a>
     </p>
   </div>
+
+  <h2>Manage Inventory</h2>
+
+  <p>Select a classification to see inventory items.</p>
+
+  <!-- Classification dropdown -->
+  <%- classificationSelect %>
+
+  <!-- Table where data will be injected -->
+  <table id="inventoryDisplay"></table>
+
+  <noscript>
+    JavaScript must be enabled to use this page.
+  </noscript>
+
+  <!-- JS file -->
+  <script src="/js/inventory.js"></script>
 </main>
