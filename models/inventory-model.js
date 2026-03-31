@@ -25,7 +25,7 @@ invModel.getInventoryById = async (inv_id) => {
 
 /* Add classification */
 invModel.addClassification = async (classification_name) => {
-  const sql = "INSERT INTO classifications (classification_name) VALUES ($1)"
+  const sql = "INSERT INTO classification (classification_name) VALUES ($1)"
   return await pool.query(sql, [classification_name])
 }
 
@@ -41,7 +41,7 @@ invModel.addInventory = async (
   return await pool.query(sql, [inv_make, inv_model, inv_year, inv_description, inv_image, inv_thumbnail, inv_price, inv_miles, inv_color, classification_id])
 }
 
-/* Update inventory (CORREGIDO Y SINCRONIZADO) */
+/* Update inventory */
 invModel.updateInventory = async (
   inv_id,
   inv_make,
@@ -92,9 +92,21 @@ invModel.updateInventory = async (
 
 /* Get all classifications */
 invModel.getClassifications = async () => {
-  const sql = "SELECT * FROM classifications ORDER BY classification_name"
+  const sql = "SELECT * FROM classification ORDER BY classification_name"
   const result = await pool.query(sql)
   return result.rows
+}
+
+/* Delete inventory item */
+invModel.deleteInventoryItem = async (inv_id) => {
+  try {
+    const sql = "DELETE FROM inventory WHERE inv_id = $1 RETURNING *"
+    const result = await pool.query(sql, [inv_id])
+    return result.rows[0]  // Devuelve el vehículo eliminado (si existe)
+  } catch (error) {
+    console.error("model delete error: " + error)
+    return null
+  }
 }
 
 module.exports = invModel
