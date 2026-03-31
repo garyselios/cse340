@@ -1,0 +1,21 @@
+<main>
+  <h1><%= title %></h1>
+  <%- messages() %>
+
+  <div class="account-management">
+    <h2>Welcome, <%= accountData.account_firstname %>!</h2>
+
+    <!-- Update Account Link (for all users) -->
+    <p class="update-link">
+      <a href="/account/update/<%= accountData.account_id %>" class="btn-update">Update Account Information</a>
+    </p>
+
+    <!-- Inventory Management Section (only for Employee/Admin) -->
+    <% if (accountData.account_type === 'Employee' || accountData.account_type === 'Admin') { %>
+      <h3>Inventory Management</h3>
+      <p>
+        <a href="/inv/" class="btn-inventory">Manage Inventory</a>
+      </p>
+    <% } %>
+  </div>
+</main>
