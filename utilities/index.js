@@ -1,9 +1,8 @@
-// utilities/index.js
 const invModel = require("../models/inventory-model");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
-const Util = {}; // 🔹 Definir el objeto antes de asignar funciones
+const Util = {};
 
 /*
  * Constructs the nav HTML unordered list
@@ -136,16 +135,32 @@ Util.checkJWTToken = (req, res, next) => {
   if (req.cookies && req.cookies.jwt) {
     jwt.verify(req.cookies.jwt, process.env.ACCESS_TOKEN_SECRET, function (err, accountData) {
       if (err) {
-        req.flash("notice", "Please log in.");
-        res.clearCookie("jwt");
-        return res.redirect("/account/login");
+        res.locals.loggedin = false;
+        res.locals.accountData = null;
+        return next();
       }
+      res.locals.loggedin = true;
       res.locals.accountData = accountData;
-      res.locals.loggedin = 1;
       next();
     });
   } else {
+    res.locals.loggedin = false;
+    res.locals.accountData = null;
     next();
+  }
+};
+
+/* 
+ * Middleware to check if user is Employee or Admin
+ */
+Util.checkAdmin = (req, res, next) => {
+  if (res.locals.loggedin && 
+      (res.locals.accountData.account_type === 'Employee' || 
+       res.locals.accountData.account_type === 'Admin')) {
+    next();
+  } else {
+    req.flash("notice", "You do not have permission to access this area.");
+    res.redirect("/account/login");
   }
 };
 

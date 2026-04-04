@@ -5,19 +5,13 @@ const utilities = require("../utilities/")
 const accountController = require("../controllers/accountController")
 const regValidate = require("../utilities/account-validation")
 
-/* 
- * Login View Route
- */
+// Route to display login view
 router.get("/login", utilities.handleErrors(accountController.buildLogin))
 
-/* 
- * Registration View Route
- */
+// Route to display registration view
 router.get("/register", utilities.handleErrors(accountController.buildRegister))
 
-/* 
- * Process Registration
- */
+// Process registration
 router.post(
   "/register",
   regValidate.registationRules(),
@@ -25,9 +19,7 @@ router.post(
   utilities.handleErrors(accountController.registerAccount)
 )
 
-/* 
- * Process Login  
-*/
+// Process login
 router.post(
   "/login",
   regValidate.loginRules(),
@@ -35,13 +27,33 @@ router.post(
   utilities.handleErrors(accountController.accountLogin)
 )
 
-/* 
- * Account Management View Protected
- */
+// Account management view
 router.get(
   "/",
   utilities.checkLogin,
-  utilities.handleErrors(accountController.buildAccountManagement)
+  utilities.handleErrors(accountController.buildManagement)
+)
+
+// Logout
+router.get("/logout", utilities.handleErrors(accountController.logout))
+
+// Update account view
+router.get("/update/:account_id", utilities.handleErrors(accountController.buildUpdateAccount))
+
+// Process account update
+router.post(
+  "/update",
+  regValidate.updateAccountRules(),
+  regValidate.checkUpdateAccountData,
+  utilities.handleErrors(accountController.updateAccount)
+)
+
+// Process password update
+router.post(
+  "/update-password",
+  regValidate.passwordUpdateRules(),
+  regValidate.checkPasswordUpdateData,
+  utilities.handleErrors(accountController.updatePassword)
 )
 
 module.exports = router
