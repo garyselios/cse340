@@ -5,6 +5,16 @@
   res.redirect('/')
 } %>
 
+<!-- Price Filter Form -->
+<form method="GET" action="/inv/type/<%= classification_id %>" class="price-filter">
+  <label>Price Range:</label>
+  <input type="text" name="min" placeholder="Min" value="<%= minPrice %>" pattern="\d*" title="Only numbers allowed">
+  <span>-</span>
+  <input type="text" name="max" placeholder="Max" value="<%= maxPrice %>" pattern="\d*" title="Only numbers allowed">
+  <button type="submit">Filter</button>
+  <a href="/inv/type/<%= classification_id %>">Clear</a>
+</form>
+
 <!-- Message Block (disabled for now) -->
 <%# messages() %>
 
