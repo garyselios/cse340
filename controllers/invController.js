@@ -7,14 +7,31 @@ const invController = {};
 invController.buildByClassificationId = async function (req, res, next) {
   try {
     const classification_id = parseInt(req.params.classificationId);
-    const data = await invModel.getInventoryByClassificationId(classification_id) || [];
+    
+    // Obtener filtros de precio desde la query string (ej: ?min=10000&max=50000)
+    const minPrice = req.query.min ? parseInt(req.query.min) : 0;
+    const maxPrice = req.query.max ? parseInt(req.query.max) : 99999999;
+    
+    let data;
+    
+    // Si hay filtro de precio activo (min > 0 o max < 99999999)
+    if (minPrice > 0 || maxPrice < 99999999) {
+      data = await invModel.getInventoryByPriceRange(classification_id, minPrice, maxPrice);
+    } else {
+      data = await invModel.getInventoryByClassificationId(classification_id);
+    }
+    
     const grid = await utilities.buildClassificationGrid(data);
     let nav = await utilities.getNav();
     const className = data[0]?.classification_name || "Classification";
+    
     res.render("./inventory/classification", {
       title: className + " vehicles",
       nav,
       grid,
+      minPrice,
+      maxPrice,
+      classification_id
     });
   } catch (error) {
     console.error("Error in buildByClassificationId:", error);

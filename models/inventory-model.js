@@ -109,4 +109,23 @@ invModel.deleteInventoryItem = async (inv_id) => {
   }
 }
 
+/* Get inventory by classification and price range */
+invModel.getInventoryByPriceRange = async (classification_id, minPrice, maxPrice) => {
+  try {
+    const sql = `
+      SELECT i.*, c.classification_name 
+      FROM inventory i
+      JOIN classification c ON i.classification_id = c.classification_id
+      WHERE i.classification_id = $1 
+        AND i.inv_price BETWEEN $2 AND $3
+      ORDER BY i.inv_price
+    `;
+    const result = await pool.query(sql, [classification_id, minPrice, maxPrice]);
+    return result.rows;
+  } catch (error) {
+    console.error("getInventoryByPriceRange error:", error);
+    return [];
+  }
+};
+
 module.exports = invModel
