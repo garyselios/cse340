@@ -1,5 +1,6 @@
-const pool = require("../database")
+/* required */
 
+const pool = require("../database")
 const invModel = {}
 
 /* Get inventory by classification */
